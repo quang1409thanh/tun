@@ -13,6 +13,8 @@ using namespace std;
 #include "LTexture.h"
 #include "LTimer.h"
 #include "LButton.h"
+
+#include "Brick.h"
 //Screen dimension constants
 const int SCREEN_WIDTH = 400;
 const int SCREEN_HEIGHT = 600;
@@ -70,20 +72,7 @@ const int TOTAL_COLOR_BRICK = 10;
 int velPauseX=0;
 int velPauseY=0;
 
-// số màu của viên gạch
-enum Color_Bick {
-    RED=0,
-    BLUE=1,
-    GREEN=2,
-    DARK_GREEN=3,
-    INDIGO=4,
-    ORANGE=5,
-    PINK=6,
-    SOLID=7,
-    VIOLET=8,
-    YELLOW=9,
-    TOTAL=10
-};
+
 // màu của quả bóng (dot)
 enum color{
     red=0,
@@ -169,125 +158,6 @@ LButton1 gButton1_Back;
 LButton2 gButtonsfx;
 LButton2 gButtonmusic;
 
-
-// khởi tạo class brick để chơi tạo ra các viên gạch
-class Brick{
-	public:
-
-		static const int BRICK_WIDTH = 50;
-		static const int BRICK_HEIGHT = 22;
-
-		static const int BRICK_VEL = 0;
-
-		Brick();
-
-		void handleEventBrick( SDL_Event& e );
-
-		void moveB ();
-
-		void renderB(char color);
-
-		int getPosXB();
-		int getPosYB();
-		int getVelXB();
-		int getVelYB();
-		
-		void free();
-
-		Brick setBrick_mPosXB(int x);
-
-		Brick setBrick(int x, int y, int velx, int vely);
-
-
-	private:
-
-		int mPosXB, mPosYB;
-
-		int mVelXB, mVelYB;
-		
-		LTexture gBrick_Texture[ TOTAL_COLOR_BRICK];
-
-};
-
-///== các hàm thành viên thuộc class này
-Brick::Brick(){
-	mPosXB=-100;
-	mPosYB=-100;
-	mVelXB=-100;
-	mVelYB=-100;
-}
-
-int Brick::getPosXB(){
-	return mPosXB;
-}
-int Brick::getPosYB(){
-	return mPosYB;
-}
-int Brick::getVelXB(){
-	return mVelXB;
-}
-int Brick::getVelYB(){
-	return mVelYB;
-}
-
-Brick Brick::setBrick(int x, int y, int velx, int vely){
-	mPosXB=x;
-	mPosYB=y;
-	mVelXB=velx;
-	mVelYB=vely;
-    return *this;
-}
-Brick Brick::setBrick_mPosXB(int x){
-    mPosXB=x;
-    return *this;
-}
-
-void Brick::renderB(char color){
-	switch (color){
-		case 'r':
-			gBricksTexture[RED].render(mPosXB,mPosYB,gRenderer);
-			break;
-		case 'b':
-			gBricksTexture[BLUE].render(mPosXB,mPosYB,gRenderer);
-			break;
-		case 'g':
-			gBricksTexture[GREEN].render(mPosXB,mPosYB,gRenderer);
-			break;
-		case 'd':
-			gBricksTexture[DARK_GREEN].render(mPosXB,mPosYB,gRenderer);
-			break;
-		case 'i':
-			gBricksTexture[INDIGO].render(mPosXB,mPosYB,gRenderer);
-			break;
-		case 'o':
-			gBricksTexture[ORANGE].render(mPosXB,mPosYB,gRenderer);
-			break;
-		case 'p':
-			gBricksTexture[PINK].render(mPosXB,mPosYB,gRenderer);
-			break;
-		case 's':
-			gBricksTexture[SOLID].render(mPosXB,mPosYB,gRenderer);
-			break;
-		case 'v':
-			gBricksTexture[VIOLET].render(mPosXB,mPosYB,gRenderer);
-			break;
-		case 'y' :
-			gBricksTexture[YELLOW].render(mPosXB,mPosYB,gRenderer);
-			break;
-	}
-}
-void Brick::free(){
-	gBricksTexture[BLUE].free();
-	gBricksTexture[RED].free();
-	gBricksTexture[GREEN].free();
-	gBricksTexture[DARK_GREEN].free();
-	gBricksTexture[INDIGO].free();
-	gBricksTexture[ORANGE].free();
-	gBricksTexture[PINK].free();
-	gBricksTexture[SOLID].free();
-	gBricksTexture[VIOLET].free();
-	gBricksTexture[YELLOW].free();
-}
 
 //====== khởi tạo class cho đối tượng mái chèo
 class Paddle
@@ -1203,31 +1073,31 @@ void Init_Bricklv5(Brick brick[]){
 void render_Brick_Lv1(Brick brick[]){
 	vector<char> color1=load_Color("source/Data/data_txt/lev1C.txt");
 	for(int i=0;i<TOTAL_BRICKSLV1;i++){
-		brick[i].renderB(color1[i]);
+		brick[i].renderB(color1[i],gBricksTexture,gRenderer);
 	}
 }
 void render_Brick_Lv2(Brick brick[]){
 	vector<char> color2=load_Color("source/Data/data_txt/lev2C.txt");
 	for(int i=0;i<TOTAL_BRICKSLV2;i++){
-		brick[i].renderB(color2[i]);
+		brick[i].renderB(color2[i],gBricksTexture,gRenderer);
 	}
 }
 void render_Brick_Lv3(Brick brick[]){
 	vector<char> color3=load_Color("source/Data/data_txt/lev3C.txt");
 	for(int i=0;i<TOTAL_BRICKSLV3;i++){
-		brick[i].renderB(color3[i]);
+		brick[i].renderB(color3[i],gBricksTexture,gRenderer);
 	}
 }
 void render_Brick_Lv4(Brick brick[]){
 	vector<char> color4=load_Color("source/Data/data_txt/lev4C.txt");
 	for(int i=0;i<TOTAL_BRICKSLV4;i++){
-		brick[i].renderB(color4[i]);
+		brick[i].renderB(color4[i],gBricksTexture,gRenderer);
 	}
 }
 void render_Brick_Lv5(Brick brick[]){
 	vector<char> color5=load_Color("source/Data/data_txt/lev5C.txt");
 	for(int i=0;i<TOTAL_BRICKSLV5;i++){
-		brick[i].renderB(color5[i]);
+		brick[i].renderB(color5[i],gBricksTexture,gRenderer);
 	}
 }
 
